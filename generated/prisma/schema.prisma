@@ -1,0 +1,76 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider   = "prisma-client-js"
+  engineType = "binary"
+  output     = "../generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+enum STATUS {
+  PENDING
+  COMPLETED
+  STARTED
+}
+
+model User {
+  id String @id @default(uuid())
+
+  userName    String @map("username")
+  email       String @unique
+  phoneNumber String @unique @map("phone_number")
+  password    String
+
+  orders Order[] @relation("customer")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userName, email])
+  @@map("users")
+}
+
+model Order {
+  id     String @id @default(uuid())
+  userId String
+
+  user       User        @relation("customer", fields: [userId], references: [id])
+  orderItems OrderItem[] @relation("orders")
+
+  subTotal Decimal
+  tax      Decimal? @default(2.50)
+  fees     Decimal  @default(5.00)
+  total    Decimal
+  status   STATUS   @default(STARTED)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@map("Orders")
+}
+
+model OrderItem {
+  id      String @id @default(uuid())
+  orderId String
+
+  order       Order   @relation("orders", fields: [orderId], references: [id])
+  ingredients String?
+
+  title       String  @default("Something delicious!")
+  description String?
+  imageURLs   String?
+
+  price    Decimal @default(15.00)
+  quantity Int     @default(1)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("Order_Items")
+}

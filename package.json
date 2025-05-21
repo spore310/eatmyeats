@@ -1,0 +1,55 @@
+{
+  "name": "nextjs",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "build:secret": "tsup --config scripts/secret/tsup.config.ts scripts/secret/index.ts --format esm --out-dir scripts/secret/dist --clean",
+    "run:secret": "pnpm build:secret && node scripts/secret/dist/index.mjs",
+    "build:seed": "tsup --config scripts/seed/tsup.config.ts",
+    "run:seed": "pnpm build:seed && node scripts/seed/dist/index.js"
+  },
+  "secrets": {
+    "generate": "tsup --config scripts/secret/tsup.config.ts scripts/secret/index.ts --format esm --out-dir scripts/secret/dist --clean",
+    "run": "pnpm build:secret && node scripts/secret/dist/index.mjs"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.7.0",
+    "dotenv": "^16.5.0",
+    "jose": "^6.0.11",
+    "lodash-es": "^4.17.21",
+    "next": "15.2.0",
+    "prisma": "^6.7.0",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "universal-cookie": "^8.0.1",
+    "validator": "^13.15.0",
+    "zod": "^3.24.4"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@types/lodash-es": "^4.17.12",
+    "@types/node": "^20",
+    "@types/react": "19.0.10",
+    "@types/react-dom": "19.0.4",
+    "@types/validator": "^13.15.0",
+    "eslint": "^9",
+    "eslint-config-next": "15.2.0",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "tsup": "^8.4.0",
+    "typescript": "^5"
+  },
+  "prisma": {
+    "seed": "pnpm t"
+  },
+  "pnpm": {
+    "overrides": {
+      "@types/react": "19.0.10",
+      "@types/react-dom": "19.0.4"
+    }
+  }
+}
